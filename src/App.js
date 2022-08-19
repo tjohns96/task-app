@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import NavBar from "./NavBar";
+import { db } from "./firebase-config.js";
+import { collection, getDocs } from "firebase/firestore";
+import LoginPage from "./LoginPage";
 
 function App() {
+  const [users, setUsers] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const usersCollectionRef = collection(db, "users");
+  const toggleLoginPage = () => {
+    setIsOpen(!isOpen);
+  };
+  useEffect(() => {
+    const getUsers = async () => {
+      const data = await getDocs(usersCollectionRef);
+      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getUsers();
+  }, [usersCollectionRef]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NavBar toggleLoginPage={toggleLoginPage} isOpen={isOpen}></NavBar>
+      {isOpen && (
+        <LoginPage
+          toggleLoginPage={toggleLoginPage}
+          isOpen={isOpen}
+        ></LoginPage>
+      )}
     </div>
   );
 }
