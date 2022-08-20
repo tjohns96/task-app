@@ -1,6 +1,6 @@
-import { uiConfig } from "./firebase-config";
+import { uiConfig } from "../firebase-config";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import { auth } from "./firebase-config";
+import { auth } from "../firebase-config";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 export default function LoginPage(props) {
