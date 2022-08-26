@@ -65,6 +65,7 @@ export default function NavBar(props) {
       id: props.currUser,
       fileName: fileName,
     });
+    setIsProfilePic(true);
   }
 
   async function getFileName() {
