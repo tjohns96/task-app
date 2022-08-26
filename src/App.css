@@ -34,3 +34,13 @@
   color: red;
   cursor: pointer;
 }
+.image-upload{
+  clip-path: circle();
+}
+.image-upload>label>img{
+  height: 64px;
+  width: 48px;
+}
+.image-upload>input {
+  display: none;
+}
