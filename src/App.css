@@ -44,3 +44,23 @@
 .image-upload>input {
   display: none;
 }
+.drawer-header{
+  position: relative;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+.drawer-header>span{
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+.nav-bar{
+  transition: margin 200ms;
+}

@@ -27,6 +27,22 @@ import uniqid from "uniqid";
 export default function NavBar(props) {
   const [profilePic, setProfilePic] = useState();
   const [isProfilePic, setIsProfilePic] = useState();
+  const [marginLeft, setMarginLeft] = useState(0);
+
+  useEffect(() => {
+    checkProfilePic();
+  }, [props.currUser]);
+
+  useEffect(() => {
+    updateProfilePic();
+  }, [isProfilePic]);
+  useEffect(() => {
+    if (props.drawerIsOpen) {
+      setMarginLeft(43.75);
+    } else {
+      setMarginLeft(0);
+    }
+  }, [props.drawerIsOpen]);
 
   async function signOut() {
     await auth.signOut();
@@ -99,28 +115,31 @@ export default function NavBar(props) {
     const url = await getDownloadURL(profilePicRef);
     return url;
   }
-  useEffect(() => {
-    checkProfilePic();
-  }, [props.currUser]);
 
-  useEffect(() => {
-    updateProfilePic();
-  }, [isProfilePic]);
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box
+      className="nav-bar"
+      sx={{
+        flexGrow: 1,
+        ml: marginLeft,
+      }}
+    >
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <Menu></Menu>
-          </IconButton>
+          {!props.drawerIsOpen && (
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              onClick={props.openDrawer}
+            >
+              <Menu></Menu>
+            </IconButton>
+          )}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Projects
+            Taskinator
           </Typography>
           <Button
             color="inherit"
