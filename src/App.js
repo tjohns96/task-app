@@ -13,6 +13,7 @@ function App() {
   const [currUser, setCurrUser] = useState();
   const [loginIsOpen, setLoginIsOpen] = useState(false);
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const [projects, setProjects] = useState([]);
   const toggleLoginPage = () => {
     setLoginIsOpen(!loginIsOpen);
   };

@@ -64,3 +64,36 @@
 .nav-bar{
   transition: margin 200ms;
 }
+.project{
+  position: relative;
+  height: 80px;
+}
+.delete-btn{
+  position: absolute;
+  left: 16px;
+}
+.delete-btn:hover{
+  cursor: pointer;
+  color: red;
+}
+.project-name{
+  margin-left: 48px;
+  min-width: calc(100% - 96px);
+  background-color: white;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  pointer-events: none;
+}
+.project-name:focus{
+  border-bottom: 1px solid gray;
+  pointer-events: all;
+}
+.edit-btn{
+  position: absolute;
+  right: 16px;
+}
+.edit-btn:hover{
+  cursor: pointer;
+  color: blue;
+}

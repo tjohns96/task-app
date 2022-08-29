@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Drawer, IconButton, Divider, List } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 import { minHeight } from "@mui/system";
+import ProjectList from "./ProjectList";
 
 export default function ProjectArea(props) {
   const [drawerWidth, setDrawerWidth] = useState(350);
@@ -36,7 +37,7 @@ export default function ProjectArea(props) {
         </IconButton>
       </div>
       <Divider></Divider>
-      <List></List>;
+      <ProjectList></ProjectList>
     </Drawer>
   );
 }
