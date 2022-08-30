@@ -60,6 +60,15 @@
   left: 0;
   right: 0;
   text-align: center;
+  width: 128px;
+}
+.add-btn{
+  position: absolute;
+  left: 20px;
+}
+.add-btn:hover{
+  cursor: pointer;
+  color: blue; 
 }
 .nav-bar{
   transition: margin 200ms;
@@ -67,6 +76,7 @@
 .project{
   position: relative;
   height: 80px;
+  cursor: pointer;
 }
 .delete-btn{
   position: absolute;
@@ -97,3 +107,58 @@
   cursor: pointer;
   color: blue;
 }
+.task-area{
+  background-color:  #f6fafb;
+  width: 80%;
+  height: 80%;
+  border-radius: 12px;
+  padding: 12px 8px;
+  border: 2px solid rgba(128, 128, 128, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+.task-area>div{
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: center;
+}
+.main-body{
+  transition: margin 200ms;
+  display: grid;
+  align-items: start;
+  justify-content: center;
+  justify-items: center;
+  grid-template-rows: 1fr 9fr;
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
+  gap: 24px;
+  grid-template-areas: 'header . . '
+                        ' todo progress-area completed ';
+  padding: 12px;
+  
+}
+.main-body>h1{
+  grid-area: header;
+  justify-self: start;
+  padding-left: 64px;
+}
+.todo{
+  grid-area: todo;
+ }
+ .inprogress{
+   grid-area: progress-area;
+ }
+ .completed{
+   grid-area: completed;
+ }
+ .add-task-btn{
+  background-color: #e8f1f1;
+  outline: none;
+  border: none;
+  width: 85%;
+  cursor: pointer;
+ }
+ .add-task-icon{
+  color: #76b5ab;
+ }

@@ -7,18 +7,23 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import LoginPage from "./components/LoginPage";
 import ProjectArea from "./components/ProjectArea";
+import MainBody from "./components/MainBody";
 
 function App() {
   const auth = getAuth();
   const [currUser, setCurrUser] = useState();
   const [loginIsOpen, setLoginIsOpen] = useState(false);
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const [currProject, setCurrProject] = useState();
   const [projects, setProjects] = useState([]);
   const toggleLoginPage = () => {
     setLoginIsOpen(!loginIsOpen);
   };
   function signOut() {
     setCurrUser();
+  }
+  function chooseProject(project) {
+    setCurrProject(project);
   }
   function openDrawer() {
     setDrawerIsOpen(true);
@@ -46,6 +51,8 @@ function App() {
       <ProjectArea
         drawerIsOpen={drawerIsOpen}
         closeDrawer={closeDrawer}
+        currProject={currProject}
+        chooseProject={chooseProject}
       ></ProjectArea>
       {loginIsOpen && (
         <LoginPage
@@ -53,6 +60,10 @@ function App() {
           isOpen={loginIsOpen}
         ></LoginPage>
       )}
+      <MainBody
+        drawerIsOpen={drawerIsOpen}
+        currProject={currProject}
+      ></MainBody>
     </div>
   );
 }

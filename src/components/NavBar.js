@@ -7,7 +7,7 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { Menu, AccountCircle } from "@mui/icons-material";
+import { Menu, AccountCircle, CalendarMonth } from "@mui/icons-material";
 import { auth, storage, db } from "../firebase-config";
 import {
   ref,
@@ -141,10 +141,12 @@ export default function NavBar(props) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Taskinator
           </Typography>
+          <CalendarMonth sx={{ mr: 4 }}></CalendarMonth>
           <Button
             color="inherit"
             size="large"
             onClick={props.currUser ? signOut : props.toggleLoginPage}
+            sx={{ mr: 4 }}
           >
             {props.currUser ? "Sign out" : "Login/Sign-up"}
           </Button>

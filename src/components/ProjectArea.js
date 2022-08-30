@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Drawer, IconButton, Divider, List } from "@mui/material";
-import { ChevronLeft } from "@mui/icons-material";
+import { ChevronLeft, Add } from "@mui/icons-material";
 import { minHeight } from "@mui/system";
 import ProjectList from "./ProjectList";
 
@@ -31,13 +31,17 @@ export default function ProjectArea(props) {
       open={props.drawerIsOpen}
     >
       <div className="drawer-header">
+        <Add className="add-btn"></Add>
         <span>Projects</span>
         <IconButton onClick={props.closeDrawer}>
           <ChevronLeft />
         </IconButton>
       </div>
       <Divider></Divider>
-      <ProjectList></ProjectList>
+      <ProjectList
+        currProject={props.currProject}
+        chooseProject={props.chooseProject}
+      ></ProjectList>
     </Drawer>
   );
 }
