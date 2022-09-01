@@ -159,6 +159,7 @@ export default function NavBar(props) {
 
                 <input
                   id="profile-submit"
+                  accept="image/*"
                   type="file"
                   onInput={uploadAndUpdate}
                 />

@@ -4,6 +4,7 @@ import { Drawer, IconButton, Divider, List } from "@mui/material";
 import { ChevronLeft, Add } from "@mui/icons-material";
 import { minHeight } from "@mui/system";
 import ProjectList from "./ProjectList";
+import uniqid from "uniqid";
 
 export default function ProjectArea(props) {
   const [drawerWidth, setDrawerWidth] = useState(350);
@@ -13,6 +14,12 @@ export default function ProjectArea(props) {
     } else if (drawerWidth !== 350) {
       setDrawerWidth(350);
     }
+  }
+  function handleClickAddBtn() {
+    props.setProjects((arr) => [
+      ...arr,
+      { id: uniqid(), data: { projectName: "" } },
+    ]);
   }
   window.addEventListener("resize", handleResize);
   return (
@@ -31,7 +38,7 @@ export default function ProjectArea(props) {
       open={props.drawerIsOpen}
     >
       <div className="drawer-header">
-        <Add className="add-btn"></Add>
+        <Add className="add-btn" onClick={handleClickAddBtn}></Add>
         <span>Projects</span>
         <IconButton onClick={props.closeDrawer}>
           <ChevronLeft />
@@ -41,6 +48,9 @@ export default function ProjectArea(props) {
       <ProjectList
         currProject={props.currProject}
         chooseProject={props.chooseProject}
+        currUser={props.currUser}
+        projects={props.projects}
+        setProjects={props.setProjects}
       ></ProjectList>
     </Drawer>
   );

@@ -14,7 +14,7 @@ export default function MainBody(props) {
 
   return (
     <Box className="main-body" sx={{ ml: marginLeft }}>
-      <h1>{props.currProject}</h1>
+      <h1>{props.currProject.data.projectName}</h1>
       <TaskArea name="To do"></TaskArea>
       <TaskArea name="In progress"></TaskArea>
       <TaskArea name="Completed"></TaskArea>

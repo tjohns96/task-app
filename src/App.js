@@ -4,18 +4,61 @@ import { Drawer } from "@mui/material";
 import NavBar from "./components/NavBar";
 import { db, auth } from "./firebase-config.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import LoginPage from "./components/LoginPage";
 import ProjectArea from "./components/ProjectArea";
 import MainBody from "./components/MainBody";
 
 function App() {
   const auth = getAuth();
-  const [currUser, setCurrUser] = useState();
+  const [currUser, setCurrUser] = useState("");
   const [loginIsOpen, setLoginIsOpen] = useState(false);
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
-  const [currProject, setCurrProject] = useState();
+  const [currProject, setCurrProject] = useState({
+    id: "",
+    data: { projectName: "" },
+  });
   const [projects, setProjects] = useState([]);
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrUser(user.uid);
+      }
+    });
+  });
+  useEffect(() => {
+    async function getProjects() {
+      if (!currUser) {
+        setProjects([]);
+        return;
+      }
+      const projectsRef = collection(db, "projects");
+      const q = query(
+        projectsRef,
+        where("uid", "==", currUser),
+        orderBy("createdDate")
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setProjects((projects) => [
+          ...projects,
+          { id: doc.id, data: doc.data() },
+        ]);
+      });
+    }
+    getProjects();
+  }, [currUser]);
+  useEffect(() => {
+    if (projects[0]) {
+      setCurrProject(projects[0]);
+    } else {
+      setCurrProject({
+        id: "",
+        data: { projectName: "" },
+      });
+    }
+  }, [projects[0]]);
+
   const toggleLoginPage = () => {
     setLoginIsOpen(!loginIsOpen);
   };
@@ -31,13 +74,9 @@ function App() {
   function closeDrawer() {
     setDrawerIsOpen(false);
   }
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrUser(user.uid);
-      }
-    });
-  });
+  function setProjectsCallback(arr) {
+    setProjects(arr);
+  }
   return (
     <div>
       <NavBar
@@ -53,6 +92,9 @@ function App() {
         closeDrawer={closeDrawer}
         currProject={currProject}
         chooseProject={chooseProject}
+        currUser={currUser}
+        setProjects={setProjectsCallback}
+        projects={projects}
       ></ProjectArea>
       {loginIsOpen && (
         <LoginPage
