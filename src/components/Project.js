@@ -3,7 +3,7 @@ import { IconButton, List, ListItem, ListItemButton } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import { db } from "../firebase-config";
 import { getDoc, setDoc, updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { Timestamp } from "firebase/firestore";
+import { Draggable } from "react-beautiful-dnd";
 
 export default function Project(props) {
   const [disabled, setDisabled] = useState(true);
@@ -33,7 +33,7 @@ export default function Project(props) {
           await setDoc(doc(db, "projects", props.thisProject.id), {
             projectName: projectName,
             uid: props.currUser,
-            createdDate: Timestamp.now(),
+            order: props.projects.length,
           });
         }
       }
@@ -96,23 +96,35 @@ export default function Project(props) {
     props.chooseProject(props.thisProject);
   }
   return (
-    <ListItem
-      className={`project ${selected ? "selected" : ""}`}
-      onClick={handleClickOnProject}
+    <Draggable
+      draggableId={props.thisProject.id}
+      index={props.projects.findIndex(
+        (project) => project === props.thisProject
+      )}
     >
-      <Delete className="delete-btn" onClick={handleClickDelete}></Delete>
-      <input
-        className="project-name"
-        value={projectName}
-        disabled={disabled}
-        onChange={disabled ? () => {} : handleTaskChange}
-        onKeyDown={handleTaskEnter}
-        onBlur={(e) => {
-          handleTaskEnter(e, true);
-        }}
-        onClick={handleClickOnInput}
-      ></input>
-      <Edit className="edit-btn" onClick={handleClickEdit}></Edit>
-    </ListItem>
+      {(provided) => (
+        <li
+          className={`project ${selected ? "selected" : ""}`}
+          onClick={handleClickOnProject}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          <Delete className="delete-btn" onClick={handleClickDelete}></Delete>
+          <input
+            className="project-name"
+            value={projectName}
+            disabled={disabled}
+            onChange={disabled ? () => {} : handleTaskChange}
+            onKeyDown={handleTaskEnter}
+            onBlur={(e) => {
+              handleTaskEnter(e, true);
+            }}
+            onClick={handleClickOnInput}
+          ></input>
+          <Edit className="edit-btn" onClick={handleClickEdit}></Edit>
+        </li>
+      )}
+    </Draggable>
   );
 }

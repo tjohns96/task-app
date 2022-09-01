@@ -9,7 +9,7 @@ import uniqid from "uniqid";
 export default function ProjectArea(props) {
   const [drawerWidth, setDrawerWidth] = useState(350);
   function handleResize() {
-    if (window.innerWidth <= 600) {
+    if (window.innerWidth <= 800) {
       setDrawerWidth(window.innerWidth);
     } else if (drawerWidth !== 350) {
       setDrawerWidth(350);

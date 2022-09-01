@@ -74,10 +74,17 @@
 .nav-bar{
   transition: margin 200ms;
 }
+.project-list{
+  list-style-type: none;
+  padding: 0px;
+}
 .project{
   position: relative;
   height: 80px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  background-color: white;
 }
 .delete-btn{
   position: absolute;
@@ -136,8 +143,10 @@
   gap: 24px;
   grid-template-areas: 'header . . '
                         ' todo progress-area completed ';
-  padding: 12px;
-  
+  padding: 12px; 
+}
+.project-name-header{
+  white-space: nowrap;
 }
 .main-body>h1{
   grid-area: header;
@@ -164,8 +173,11 @@
   color: #76b5ab;
  }
  .selected{
-  -webkit-box-shadow: inset -1px -1px 3px 0px black; 
-  box-shadow: inset -1px -1px 3px 0px black;
-  border-top: 1px solid black;
+  -webkit-box-shadow: inset -1px -1px 3px 0px 
+  #1976d2; 
+  box-shadow: inset -1px -1px 3px 0px 
+  #1976d2;
+  border-top: 1px solid 
+  #1976d2;
  }
  

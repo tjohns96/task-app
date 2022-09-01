@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { Drawer } from "@mui/material";
 import NavBar from "./components/NavBar";
 import { db, auth } from "./firebase-config.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -20,6 +19,9 @@ function App() {
   });
   const [projects, setProjects] = useState([]);
   useEffect(() => {
+    console.log(projects);
+  }, [projects]);
+  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setCurrUser(user.uid);
@@ -36,7 +38,7 @@ function App() {
       const q = query(
         projectsRef,
         where("uid", "==", currUser),
-        orderBy("createdDate")
+        orderBy("order")
       );
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -49,15 +51,13 @@ function App() {
     getProjects();
   }, [currUser]);
   useEffect(() => {
-    if (projects[0]) {
-      setCurrProject(projects[0]);
-    } else {
+    if (!projects[0]) {
       setCurrProject({
         id: "",
         data: { projectName: "" },
       });
     }
-  }, [projects[0]]);
+  }, [projects]);
 
   const toggleLoginPage = () => {
     setLoginIsOpen(!loginIsOpen);
