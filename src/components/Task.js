@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { ListItem } from "@mui/material";
+import { Card } from "@mui/material";
+import { Delete, Edit, PersonalVideoRounded } from "@mui/icons-material";
+import { Draggable } from "react-beautiful-dnd";
 
-export default function Task() {
+export default function Task(props) {
   const [disabled, setDisabled] = useState(true);
   async function handleClickEdit(e) {
     e.stopPropagation();
@@ -11,20 +13,20 @@ export default function Task() {
     input.select();
   }
   return (
-    <ListItem className="task">
-      <Delete className="delete-btn" onClick={handleClickDelete}></Delete>
-      <input
-        className="task-name"
-        value=""
-        disabled={disabled}
-        onChange={disabled ? () => {} : handleTaskChange}
-        onKeyDown={handleTaskEnter}
-        onBlur={(e) => {
-          handleTaskEnter(e, true);
-        }}
-        onClick={handleClickOnInput}
-      ></input>
-      <Edit className="edit-btn" onClick={handleClickEdit}></Edit>
-    </ListItem>
+    <Draggable
+      draggableId={props.thisTask.id}
+      index={props.thisTask.data.order}
+    >
+      {(provided) => (
+        <li
+          className="task"
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          {props.thisTask.id}
+        </li>
+      )}
+    </Draggable>
   );
 }
