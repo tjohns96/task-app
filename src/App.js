@@ -15,6 +15,7 @@ function App() {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [currProject, setCurrProject] = useState();
   const [projects, setProjects] = useState([]);
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -68,6 +69,7 @@ function App() {
   function setProjectsCallback(arr) {
     setProjects(arr);
   }
+
   return (
     <div>
       <NavBar
@@ -96,6 +98,7 @@ function App() {
       <MainBody
         drawerIsOpen={drawerIsOpen}
         currProject={currProject}
+        currUser={currUser}
       ></MainBody>
     </div>
   );

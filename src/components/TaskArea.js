@@ -3,6 +3,8 @@ import { Add } from "@mui/icons-material";
 import { Droppable } from "react-beautiful-dnd";
 import uniqid from "uniqid";
 import Task from "./Task";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase-config";
 export default function TaskArea(props) {
   const nameSpaceStripped = props.name.toLowerCase().replace(/\s+/g, "");
   let tasks = [];
@@ -18,63 +20,53 @@ export default function TaskArea(props) {
       break;
   }
   const taskItems = tasks.map((task) => {
-    if (task.data.project === props.currProject) {
+    if (props.currProject && task.data.projectId === props.currProject.id) {
       return (
         <Task
-          name={task.id}
+          name={task.data.taskName}
           key={task.id}
           thisTask={task}
           currProject={props.currProject}
+          taskstodo={props.taskstodo}
+          tasksinprogress={props.tasksinprogress}
+          taskscompleted={props.taskscompleted}
+          setTaskstodo={props.setTaskstodo}
+          setTasksinprogress={props.setTasksinprogress}
+          setTaskscompleted={props.setTaskscompleted}
         ></Task>
       );
     }
   });
 
-  function handleAddClick() {
+  async function handleAddClick() {
     if (!props.currProject) {
       return;
     }
+    const newTask = {
+      id: uniqid(),
+      data: {
+        order: tasks.length,
+        status: nameSpaceStripped,
+        projectId: props.currProject.id,
+        taskName: "New task",
+        description: "Your description here",
+        uid: props.currUser,
+        dueDate: Date(),
+      },
+    };
     switch (nameSpaceStripped) {
       case "todo":
-        props.setTaskstodo((tasks) => [
-          ...tasks,
-          {
-            id: uniqid(),
-            data: {
-              order: tasks.length,
-              status: nameSpaceStripped,
-              project: props.currProject,
-            },
-          },
-        ]);
+        props.setTaskstodo((tasks) => [...tasks, newTask]);
         break;
       case "inprogress":
-        props.setTasksinprogress((tasks) => [
-          ...tasks,
-          {
-            id: uniqid(),
-            data: {
-              order: tasks.length,
-              status: nameSpaceStripped,
-              project: props.currProject,
-            },
-          },
-        ]);
+        props.setTasksinprogress((tasks) => [...tasks, newTask]);
         break;
       case "completed":
-        props.setTaskscompleted((tasks) => [
-          ...tasks,
-          {
-            id: uniqid(),
-            data: {
-              order: tasks.length,
-              status: nameSpaceStripped,
-              project: props.currProject,
-            },
-          },
-        ]);
+        props.setTaskscompleted((tasks) => [...tasks, newTask]);
         break;
     }
+    const docRef = doc(db, "tasks", newTask.id);
+    await setDoc(docRef, newTask);
   }
   return (
     <div className={`task-area ${nameSpaceStripped}`}>

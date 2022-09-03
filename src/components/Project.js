@@ -49,12 +49,12 @@ export default function Project(props) {
     input.focus();
     input.select();
   }
-  function handleTaskChange(e) {
+  function handleProjectChange(e) {
     if (e.target.value.length < 25) {
       setProjectName(e.target.value);
     }
   }
-  function handleTaskEnter(e, onBlur) {
+  function handleProjectEnter(e, onBlur) {
     if (e.key === "Enter" || onBlur) {
       if (e.target.value === "") {
         handleClickEdit(e);
@@ -115,10 +115,10 @@ export default function Project(props) {
             className="project-name"
             value={projectName}
             disabled={disabled}
-            onChange={disabled ? () => {} : handleTaskChange}
-            onKeyDown={handleTaskEnter}
+            onChange={disabled ? () => {} : handleProjectChange}
+            onKeyDown={handleProjectEnter}
             onBlur={(e) => {
-              handleTaskEnter(e, true);
+              handleProjectEnter(e, true);
             }}
             onClick={handleClickOnInput}
           ></input>

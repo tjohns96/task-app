@@ -8,8 +8,20 @@ import uniqid from "uniqid";
 
 export default function ProjectArea(props) {
   const [drawerWidth, setDrawerWidth] = useState(350);
+  useEffect(() => {
+    if (window.innerWidth < 900) {
+      setDrawerWidth(window.innerWidth);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (drawerWidth == window.innerWidth) {
+      props.closeDrawer();
+    }
+  }, [props.currProject]);
+
   function handleResize() {
-    if (window.innerWidth <= 800) {
+    if (window.innerWidth < 900) {
       setDrawerWidth(window.innerWidth);
     } else if (drawerWidth !== 350) {
       setDrawerWidth(350);

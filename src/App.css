@@ -119,6 +119,7 @@
   background-color:  #f6fafb;
   width: 80%;
   height: 80%;
+  min-height: 500px;
   border-radius: 12px;
   padding: 12px 8px;
   border: 2px solid rgba(128, 128, 128, 0.2);
@@ -126,6 +127,7 @@
   flex-direction: column;
   gap: 24px;
   align-items: center;
+  overflow: auto;
 }
 .task-area>div{
   font-weight: bold;
@@ -144,6 +146,18 @@
   grid-template-areas: 'header . . '
                         ' todo progress-area completed ';
   padding: 12px; 
+}
+.main-body.mobile{
+  display: grid;
+  align-items: start;
+  justify-content: center;
+  justify-items: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 6fr 6fr 6fr;
+  grid-template-areas: "header"
+                        "todo"
+                        "progress-area"
+                        "completed";
 }
 .project-name-header{
   white-space: nowrap;
@@ -180,4 +194,77 @@
   border-top: 1px solid 
   #1976d2;
  }
- 
+ .task-list{
+  list-style: none;
+  padding: 0px;
+  width: 90%;
+  min-height: 100px;
+  transition: border 100ms ease-in 200ms;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+ }
+ .task{
+  background-color: white;
+  border-radius: 4px;
+  width: 100%;
+  position: relative;
+  
+ }
+ .height{
+  min-height: 380px;;
+ }
+ .delete-task{
+  position: absolute;
+  right: 20px;
+  top: 20px;
+ }
+ .delete-task:hover{
+  color: red;
+  cursor: pointer;
+ }
+ .task-name{
+  outline: none;
+  border:none;
+  margin: 0 auto 12px;
+  width: 80%;
+  font-size: 1.5rem;
+ }
+ .task-name:focus{
+  border-bottom: 1px solid gray;
+  pointer-events: all;
+ }
+ .highlighted{
+  border: 1px dashed #76b5ab;
+  border-radius: 12px;
+ }
+ .task-description{
+  resize: none;
+  margin: 0 auto;
+  width: 95%;
+  font-size: 1rem;
+  color: grey;
+  border: none;
+  outline: none;
+ }
+ .task-description:hover{
+  cursor: text;
+ }
+ .task-description:focus{
+  color: black;
+  border: 1px solid rgba(128, 128, 128, 0.5);
+  border-radius: 4px;
+ }
+ .due-date{
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+ }
+ .date-inp{
+  margin-bottom: 16px;
+  font-size: 1rem;
+  border: none;
+ }
+ .date-inp:focus{
+  outline: none;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+ }
