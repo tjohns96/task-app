@@ -24,6 +24,7 @@ import {
   where,
 } from "firebase/firestore";
 import uniqid from "uniqid";
+import TasksCalendar from "./TasksCalendar";
 export default function NavBar(props) {
   const [profilePic, setProfilePic] = useState();
   const [isProfilePic, setIsProfilePic] = useState();
@@ -117,6 +118,10 @@ export default function NavBar(props) {
     return url;
   }
 
+  function closeCalendarCallback() {
+    setCalendarIsOpen(false);
+  }
+
   return (
     <Box
       className="nav-bar"
@@ -142,21 +147,24 @@ export default function NavBar(props) {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, mr: 1 }}>
             Taskinator
           </Typography>
-          <CalendarMonth
-            sx={{ mr: 1 }}
-            className="calendar-icon"
-            onClick={() => {
-              setCalendarIsOpen(!calendarIsOpen);
-            }}
-          >
+          <div>
+            <CalendarMonth
+              sx={{ mr: 1 }}
+              className="calendar-icon"
+              onClick={() => {
+                setCalendarIsOpen(!calendarIsOpen);
+              }}
+            ></CalendarMonth>
             {calendarIsOpen && (
-              <div className="calendar-wrapper">
-                {" "}
-                <div className="triangle"></div>
-                <div className=""></div>
-              </div>
+              <TasksCalendar
+                taskstodo={props.taskstodo}
+                taskscompleted={props.taskscompleted}
+                tasksinprogress={props.tasksinprogress}
+                calendarIsOpen={calendarIsOpen}
+                closeCalendar={closeCalendarCallback}
+              ></TasksCalendar>
             )}
-          </CalendarMonth>
+          </div>
           <Button
             color="inherit"
             size="large"

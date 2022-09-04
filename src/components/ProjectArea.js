@@ -32,12 +32,16 @@ export default function ProjectArea(props) {
   function handleClickAddBtn() {
     const newTask = {
       id: uniqid(),
-      data: { projectName: "New project", uid: props.currUser },
+      data: {
+        projectName: "New project",
+        uid: props.currUser,
+        order: props.projects.length,
+      },
     };
     props.setProjects((arr) => [...arr, newTask]);
     if (props.currUser) {
       setDoc(doc(db, "projects", newTask.id), {
-        id: newTask.id,
+        order: newTask.data.order,
         projectName: newTask.data.projectName,
         uid: newTask.data.uid,
       });

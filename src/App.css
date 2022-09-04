@@ -8,6 +8,7 @@
     height: 100vh;
     top: 0;
     left: 0;
+    z-index: 12;
 }
 .login-area {
   position: relative;
@@ -21,6 +22,7 @@
   padding: 20px;
   border: 1px solid #999;
   overflow: auto;
+  z-index: 13;
 }
 .wrapper{
   position: relative;
@@ -118,6 +120,7 @@
 .task-area{
   background-color:  #f6fafb;
   width: 80%;
+  min-width: 300px;
   height: 80%;
   min-height: 500px;
   border-radius: 12px;
@@ -136,6 +139,7 @@
 }
 .main-body{
   transition: margin 200ms;
+  max-height: 90vh;
   display: grid;
   align-items: start;
   justify-content: center;
@@ -217,6 +221,7 @@
   border-radius: 4px;
   width: 100%;
   position: relative;
+  min-width: 260px;
   
  }
  .height{
@@ -281,14 +286,94 @@
   position: relative;
  }
  .calendar-wrapper{
-  width: 50px;
   position: absolute;
-  bottom: -10px;
-  background-color: red;
+ 
  }
  .triangle{
-  width: 30px;
+  width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 20px solid black;
+      outline: gray;
+ }
+ .calendar-container{
+  box-sizing: border-box;
   position: absolute;
-  background-color: red;
-  bottom: -10px;
+  bottom: -360px;
+  left: -650px;
+  z-index: 10;
+  border: 2px solid black;
+  background-color: white;
+  width: 800px;
+  border-radius: 6px;
+  padding: 16px;
+  height: 360px;
+  display: flex;
+  justify-content: space-around;
+ }
+ .todo-list{
+  overflow: auto;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  
+}
+.todo-card{
+  width: 250px;
+}
+.close-calendar{
+  position: absolute;
+  top: 25px;
+  right: -120px;
+  z-index: 11;
+  color: black;
+}
+.close-calendar:hover{
+  color: red;
+}
+@media(max-width:850px){
+  .calendar-container{
+    width: 440px;
+    left: -250px;
+  }
+  .react-calendar{
+    width: 200px !important;
+  }
+  .react-calendar__navigation__arrow{
+    min-width: 30px !important;
+  }
+  .todo-card{
+    width: 182px;
+    border: 1px solid black;
+  }
+  .close-calendar{
+    top: 25px;
+    right: -168px;  
+  }
+}
+
+ @media(max-width:450px) {
+  .calendar-container{
+    left: -162px;
+    width: 320px;
+    border-radius: 6px;
+    padding: 0px;
+   }
+   .react-calendar{
+    width: 200px !important;
+  }
+  .react-calendar__navigation__arrow{
+    min-width: 30px !important;
+  }
+  .todo-card{
+    width: 110px;
+    border: 1px solid black;
+  }
+  .close-calendar{
+    top: 25px;
+    right: -135px;  
+  }
  }

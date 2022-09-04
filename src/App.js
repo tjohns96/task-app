@@ -15,7 +15,9 @@ function App() {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [currProject, setCurrProject] = useState();
   const [projects, setProjects] = useState([]);
-
+  const [taskstodo, setTaskstodo] = useState([]);
+  const [tasksinprogress, setTasksinprogress] = useState([]);
+  const [taskscompleted, setTaskscompleted] = useState([]);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -72,7 +74,15 @@ function App() {
   function setProjectsCallback(arr) {
     setProjects(arr);
   }
-
+  function setTaskstodoCallback(arr) {
+    setTaskstodo(arr);
+  }
+  function setTasksinprogressCallback(arr) {
+    setTasksinprogress(arr);
+  }
+  function setTaskscompletedCallback(arr) {
+    setTaskscompleted(arr);
+  }
   return (
     <div>
       <NavBar
@@ -82,6 +92,9 @@ function App() {
         signOut={signOut}
         drawerIsOpen={drawerIsOpen}
         openDrawer={openDrawer}
+        taskstodo={taskstodo}
+        taskscompleted={taskscompleted}
+        tasksinprogress={tasksinprogress}
       ></NavBar>
       <ProjectArea
         drawerIsOpen={drawerIsOpen}
@@ -102,6 +115,12 @@ function App() {
         drawerIsOpen={drawerIsOpen}
         currProject={currProject}
         currUser={currUser}
+        taskstodo={taskstodo}
+        taskscompleted={taskscompleted}
+        tasksinprogress={tasksinprogress}
+        setTaskstodo={setTaskstodoCallback}
+        setTasksinprogress={setTasksinprogressCallback}
+        setTaskscompleted={setTaskscompletedCallback}
       ></MainBody>
     </div>
   );

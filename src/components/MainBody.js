@@ -15,9 +15,6 @@ import {
 } from "firebase/firestore";
 
 export default function MainBody(props) {
-  const [taskstodo, setTaskstodo] = useState([]);
-  const [tasksinprogress, setTasksinprogress] = useState([]);
-  const [taskscompleted, setTaskscompleted] = useState([]);
   const ref = useRef(null);
   const firstRender = useRef(true);
   const [marginLeft, setMarginLeft] = useState(0);
@@ -40,14 +37,12 @@ export default function MainBody(props) {
     applyMobileStyle(true);
   }, [marginLeft]);
 
-  useEffect(() => {}, [taskscompleted, taskstodo, tasksinprogress]);
-
   useEffect(() => {
     async function getTasks() {
       if (!props.currUser) {
-        setTaskstodo([]);
-        setTaskscompleted([]);
-        setTasksinprogress([]);
+        props.setTaskstodo([]);
+        props.setTaskscompleted([]);
+        props.setTasksinprogress([]);
         return;
       }
       const tasksRef = collection(db, "tasks");
@@ -60,7 +55,7 @@ export default function MainBody(props) {
       querySnapshot.forEach((doc) => {
         switch (doc.data().data.status) {
           case "todo":
-            setTaskstodo((arr) => [
+            props.setTaskstodo((arr) => [
               ...arr,
               {
                 id: doc.id,
@@ -77,7 +72,7 @@ export default function MainBody(props) {
             ]);
             break;
           case "inprogress":
-            setTasksinprogress((arr) => [
+            props.setTasksinprogress((arr) => [
               ...arr,
               {
                 id: doc.id,
@@ -94,7 +89,7 @@ export default function MainBody(props) {
             ]);
             break;
           case "completed":
-            setTaskscompleted((arr) => [
+            props.setTaskscompleted((arr) => [
               ...arr,
               {
                 id: doc.id,
@@ -148,15 +143,6 @@ export default function MainBody(props) {
     }
   }
 
-  function setTaskstodoCallback(arr) {
-    setTaskstodo(arr);
-  }
-  function setTasksinprogressCallback(arr) {
-    setTasksinprogress(arr);
-  }
-  function setTaskscompletedCallback(arr) {
-    setTaskscompleted(arr);
-  }
   function handleDragStart() {
     const taskLists = document.querySelectorAll(".task-list");
     taskLists.forEach((task) => task.classList.add("highlighted"));
@@ -170,13 +156,13 @@ export default function MainBody(props) {
       let tasksCopy = [];
       switch (destination.droppableId) {
         case "todo":
-          tasksCopy = [...taskstodo];
+          tasksCopy = [...props.taskstodo];
           break;
         case "inprogress":
-          tasksCopy = [...tasksinprogress];
+          tasksCopy = [...props.tasksinprogress];
           break;
         case "completed":
-          tasksCopy = [...taskscompleted];
+          tasksCopy = [...props.taskscompleted];
           break;
       }
       const movedTaskCopy = tasksCopy[source.index];
@@ -187,13 +173,13 @@ export default function MainBody(props) {
       }
       switch (destination.droppableId) {
         case "todo":
-          setTaskstodo(tasksCopy);
+          props.setTaskstodo(tasksCopy);
           break;
         case "inprogress":
-          setTasksinprogress(tasksCopy);
+          props.setTasksinprogress(tasksCopy);
           break;
         case "completed":
-          setTaskscompleted(tasksCopy);
+          props.setTaskscompleted(tasksCopy);
           break;
       }
       if (props.currUser) {
@@ -209,28 +195,31 @@ export default function MainBody(props) {
       let tasksSourceCopy = [];
       switch (source.droppableId) {
         case "todo":
-          tasksSourceCopy = [...taskstodo];
+          tasksSourceCopy = [...props.taskstodo];
           break;
         case "inprogress":
-          tasksSourceCopy = [...tasksinprogress];
+          tasksSourceCopy = [...props.tasksinprogress];
           break;
         case "completed":
-          tasksSourceCopy = [...taskscompleted];
+          tasksSourceCopy = [...props.taskscompleted];
           break;
       }
       let tasksDestinationCopy = [];
       switch (destination.droppableId) {
         case "todo":
-          tasksDestinationCopy = [...taskstodo];
+          tasksDestinationCopy = [...props.taskstodo];
           break;
         case "inprogress":
-          tasksDestinationCopy = [...tasksinprogress];
+          tasksDestinationCopy = [...props.tasksinprogress];
           break;
         case "completed":
-          tasksDestinationCopy = [...taskscompleted];
+          tasksDestinationCopy = [...props.taskscompleted];
           break;
       }
+      console.log(tasksSourceCopy);
+      console.log(source.index);
       const movedTaskCopy = tasksSourceCopy[source.index];
+      console.log(movedTaskCopy);
       movedTaskCopy.data.status = destination.droppableId;
       tasksSourceCopy.splice(source.index, 1);
       tasksDestinationCopy.splice(destination.index, 0, movedTaskCopy);
@@ -242,24 +231,24 @@ export default function MainBody(props) {
       }
       switch (source.droppableId) {
         case "todo":
-          setTaskstodo(tasksSourceCopy);
+          props.setTaskstodo(tasksSourceCopy);
           break;
         case "inprogress":
-          setTasksinprogress(tasksSourceCopy);
+          props.setTasksinprogress(tasksSourceCopy);
           break;
         case "completed":
-          setTaskscompleted(tasksSourceCopy);
+          props.setTaskscompleted(tasksSourceCopy);
           break;
       }
       switch (destination.droppableId) {
         case "todo":
-          setTaskstodo(tasksDestinationCopy);
+          props.setTaskstodo(tasksDestinationCopy);
           break;
         case "inprogress":
-          setTasksinprogress(tasksDestinationCopy);
+          props.setTasksinprogress(tasksDestinationCopy);
           break;
         case "completed":
-          setTaskscompleted(tasksDestinationCopy);
+          props.setTaskscompleted(tasksDestinationCopy);
           break;
       }
       if (props.currUser) {
@@ -290,34 +279,34 @@ export default function MainBody(props) {
       <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
         <TaskArea
           name="To do"
-          taskstodo={taskstodo}
-          tasksinprogress={tasksinprogress}
-          taskscompleted={taskscompleted}
-          setTaskstodo={setTaskstodoCallback}
-          setTasksinprogress={setTasksinprogressCallback}
-          setTaskscompleted={setTaskscompletedCallback}
+          taskstodo={props.taskstodo}
+          tasksinprogress={props.tasksinprogress}
+          taskscompleted={props.taskscompleted}
+          setTaskstodo={props.setTaskstodo}
+          setTasksinprogress={props.setTasksinprogress}
+          setTaskscompleted={props.setTaskscompleted}
           currProject={props.currProject}
           currUser={props.currUser}
         ></TaskArea>
         <TaskArea
           name="In progress"
-          taskstodo={taskstodo}
-          tasksinprogress={tasksinprogress}
-          taskscompleted={taskscompleted}
-          setTaskstodo={setTaskstodoCallback}
-          setTasksinprogress={setTasksinprogressCallback}
-          setTaskscompleted={setTaskscompletedCallback}
+          taskstodo={props.taskstodo}
+          tasksinprogress={props.tasksinprogress}
+          taskscompleted={props.taskscompleted}
+          setTaskstodo={props.setTaskstodo}
+          setTasksinprogress={props.setTasksinprogress}
+          setTaskscompleted={props.setTaskscompleted}
           currProject={props.currProject}
           currUser={props.currUser}
         ></TaskArea>
         <TaskArea
           name="Completed"
-          taskstodo={taskstodo}
-          tasksinprogress={tasksinprogress}
-          taskscompleted={taskscompleted}
-          setTaskstodo={setTaskstodoCallback}
-          setTasksinprogress={setTasksinprogressCallback}
-          setTaskscompleted={setTaskscompletedCallback}
+          taskstodo={props.taskstodo}
+          tasksinprogress={props.tasksinprogress}
+          taskscompleted={props.taskscompleted}
+          setTaskstodo={props.setTaskstodo}
+          setTasksinprogress={props.setTasksinprogress}
+          setTaskscompleted={props.setTaskscompleted}
           currProject={props.currProject}
           currUser={props.currUser}
         ></TaskArea>

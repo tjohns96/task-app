@@ -5,7 +5,6 @@ import DatePicker from "react-datepicker";
 import { Delete } from "@mui/icons-material";
 import { db } from "../firebase-config";
 import { updateDoc, doc, deleteDoc } from "firebase/firestore";
-import { DateWithoutTime } from "epoq";
 
 export default function Task(props) {
   const [taskName, setTaskName] = useState(props.thisTask.data.taskName);
@@ -68,9 +67,7 @@ export default function Task(props) {
           props.setTaskscompleted(tasks);
           break;
       }
-      console.log(props.currUser);
       if (props.currUser) {
-        console.log("fire");
         const taskRef = doc(db, "tasks", thisTask.id);
         await updateDoc(taskRef, { "data.taskName": e.target.value });
       }
@@ -134,6 +131,12 @@ export default function Task(props) {
     }
     const currIndex = tasks.findIndex((task) => task === thisTask);
     tasks.splice(currIndex, 1);
+    tasks.forEach(async (task, index) => {
+      task.data.order = index;
+      if (props.currUser) {
+        await updateDoc(doc(db, "tasks", task.id), { "data.order": index });
+      }
+    });
     switch (thisTask.data.status) {
       case "todo":
         props.setTaskstodo(tasks);
@@ -152,6 +155,34 @@ export default function Task(props) {
   async function handleDateInput(date) {
     const newDate = date.toLocaleDateString("en-US");
     setDueDate(new Date(newDate));
+    const thisTask = props.thisTask;
+    let tasks = [];
+    switch (thisTask.data.status) {
+      case "todo":
+        tasks = [...props.taskstodo];
+        break;
+      case "inprogress":
+        tasks = [...props.tasksinprogress];
+        break;
+      case "completed":
+        tasks = [...props.taskscompleted];
+        break;
+    }
+    const currIndex = tasks.findIndex((task) => task === thisTask);
+    let task = tasks[currIndex];
+    task.data.dueDate = newDate;
+    tasks[currIndex] = task;
+    switch (thisTask.data.status) {
+      case "todo":
+        props.setTaskstodo(tasks);
+        break;
+      case "inprogress":
+        props.setTasksinprogress(tasks);
+        break;
+      case "completed":
+        props.setTaskscompleted(tasks);
+        break;
+    }
     if (props.currUser) {
       const docRef = doc(db, "tasks", props.thisTask.id);
       await updateDoc(docRef, { "data.dueDate": newDate });
