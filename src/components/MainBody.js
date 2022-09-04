@@ -2,7 +2,6 @@ import { Box } from "@mui/system";
 import React, { useState, useEffect, useRef } from "react";
 import TaskArea from "./TaskArea";
 import { DragDropContext } from "react-beautiful-dnd";
-import { ContentPasteOffSharp, Source } from "@mui/icons-material";
 import { db } from "../firebase-config";
 import {
   query,
