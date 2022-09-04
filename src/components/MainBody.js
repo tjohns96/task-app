@@ -2,7 +2,7 @@ import { Box } from "@mui/system";
 import React, { useState, useEffect, useRef } from "react";
 import TaskArea from "./TaskArea";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Source } from "@mui/icons-material";
+import { ContentPasteOffSharp, Source } from "@mui/icons-material";
 import { db } from "../firebase-config";
 import {
   query,
@@ -196,13 +196,15 @@ export default function MainBody(props) {
           setTaskscompleted(tasksCopy);
           break;
       }
-      tasksCopy.forEach(async (task) => {
-        const taskRef = doc(db, "tasks", task.id);
-        await updateDoc(taskRef, {
-          "data.status": task.data.status,
-          "data.order": task.data.order,
+      if (props.currUser) {
+        tasksCopy.forEach(async (task) => {
+          const taskRef = doc(db, "tasks", task.id);
+          await updateDoc(taskRef, {
+            "data.status": task.data.status,
+            "data.order": task.data.order,
+          });
         });
-      });
+      }
     } else {
       let tasksSourceCopy = [];
       switch (source.droppableId) {
@@ -260,20 +262,22 @@ export default function MainBody(props) {
           setTaskscompleted(tasksDestinationCopy);
           break;
       }
-      tasksSourceCopy.forEach(async (task) => {
-        const taskRef = doc(db, "tasks", task.id);
-        await updateDoc(taskRef, {
-          "data.status": task.data.status,
-          "data.order": task.data.order,
+      if (props.currUser) {
+        tasksSourceCopy.forEach(async (task) => {
+          const taskRef = doc(db, "tasks", task.id);
+          await updateDoc(taskRef, {
+            "data.status": task.data.status,
+            "data.order": task.data.order,
+          });
         });
-      });
-      tasksDestinationCopy.forEach(async (task) => {
-        const taskRef = doc(db, "tasks", task.id);
-        await updateDoc(taskRef, {
-          "data.status": task.data.status,
-          "data.order": task.data.order,
+        tasksDestinationCopy.forEach(async (task) => {
+          const taskRef = doc(db, "tasks", task.id);
+          await updateDoc(taskRef, {
+            "data.status": task.data.status,
+            "data.order": task.data.order,
+          });
         });
-      });
+      }
     }
   }
   return (
@@ -281,7 +285,7 @@ export default function MainBody(props) {
       <h1 className="project-name-header">
         {props.currProject
           ? props.currProject.data.projectName
-          : "Add or select a project to get started"}
+          : "Add a project to get started"}
       </h1>
       <DragDropContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
         <TaskArea

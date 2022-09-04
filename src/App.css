@@ -153,7 +153,7 @@
   justify-content: center;
   justify-items: center;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 6fr 6fr 6fr;
+  grid-template-rows: 1fr 12fr 12fr 12fr;
   grid-template-areas: "header"
                         "todo"
                         "progress-area"
@@ -161,6 +161,14 @@
 }
 .project-name-header{
   white-space: nowrap;
+}
+@media(max-width:600px){
+  .project-name-header{
+    font-size: 1.5rem;
+    position: relative;
+    right: 25px;
+    z-index: -1;
+  }
 }
 .main-body>h1{
   grid-area: header;
@@ -267,4 +275,20 @@
  .date-inp:focus{
   outline: none;
   border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+ }
+ .calendar-icon{
+  cursor: pointer;
+  position: relative;
+ }
+ .calendar-wrapper{
+  width: 50px;
+  position: absolute;
+  bottom: -10px;
+  background-color: red;
+ }
+ .triangle{
+  width: 30px;
+  position: absolute;
+  background-color: red;
+  bottom: -10px;
  }

@@ -20,31 +20,9 @@ export default function Project(props) {
     }
   }, [props.currProject]);
 
-  useEffect(() => {
-    async function updateDatabase() {
-      if (changed) {
-        const docRef = doc(db, "projects", props.thisProject.id);
-        const docSnap = await getDoc(docRef);
-        try {
-          await updateDoc(docRef, {
-            projectName: projectName,
-          });
-        } catch (error) {
-          await setDoc(doc(db, "projects", props.thisProject.id), {
-            projectName: projectName,
-            uid: props.currUser,
-            order: props.projects.length,
-          });
-        }
-      }
-    }
-    updateDatabase();
-    setChanged(false);
-  }, [changed]);
-
   async function handleClickEdit(e) {
     e.stopPropagation();
-    await setDisabled(false);
+    await setDisabled(false); //black magic that works for some reason
     const input = e.target.closest(".project").firstChild.nextSibling;
     input.focus();
     input.select();
@@ -54,7 +32,7 @@ export default function Project(props) {
       setProjectName(e.target.value);
     }
   }
-  function handleProjectEnter(e, onBlur) {
+  async function handleProjectEnter(e, onBlur) {
     if (e.key === "Enter" || onBlur) {
       if (e.target.value === "") {
         handleClickEdit(e);
@@ -70,17 +48,25 @@ export default function Project(props) {
       project.data.projectName = e.target.value;
       projects[currIndex] = project;
       props.setProjects(projects);
-      setChanged(true);
+      if (props.currUser) {
+        const docRef = doc(db, "projects", project.id);
+        await updateDoc(docRef, {
+          projectName: project.data.projectName,
+        });
+      }
     }
   }
   async function handleClickDelete(e) {
     e.stopPropagation();
-    await deleteDoc(doc(db, "projects", props.thisProject.id));
+    if (props.currUser) {
+      await deleteDoc(doc(db, "projects", props.thisProject.id));
+    }
     const thisProject = (project) => project === props.thisProject;
     const currIndex = props.projects.findIndex(thisProject);
     let projects = [...props.projects];
     projects.splice(currIndex, 1);
     props.setProjects(projects);
+    props.chooseProject();
   }
   function handleClickOnInput(e) {
     e.stopPropagation();

@@ -28,6 +28,7 @@ export default function NavBar(props) {
   const [profilePic, setProfilePic] = useState();
   const [isProfilePic, setIsProfilePic] = useState();
   const [marginLeft, setMarginLeft] = useState(0);
+  const [calendarIsOpen, setCalendarIsOpen] = useState(false);
 
   useEffect(() => {
     checkProfilePic();
@@ -132,21 +133,35 @@ export default function NavBar(props) {
               edge="start"
               color="inherit"
               aria-label="menu"
-              sx={{ mr: 2 }}
+              sx={{ mr: 1 }}
               onClick={props.openDrawer}
             >
               <Menu></Menu>
             </IconButton>
           )}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, mr: 1 }}>
             Taskinator
           </Typography>
-          <CalendarMonth sx={{ mr: 4 }}></CalendarMonth>
+          <CalendarMonth
+            sx={{ mr: 1 }}
+            className="calendar-icon"
+            onClick={() => {
+              setCalendarIsOpen(!calendarIsOpen);
+            }}
+          >
+            {calendarIsOpen && (
+              <div className="calendar-wrapper">
+                {" "}
+                <div className="triangle"></div>
+                <div className=""></div>
+              </div>
+            )}
+          </CalendarMonth>
           <Button
             color="inherit"
             size="large"
             onClick={props.currUser ? signOut : props.toggleLoginPage}
-            sx={{ mr: 4 }}
+            sx={{ mr: 1 }}
           >
             {props.currUser ? "Sign out" : "Login/Sign-up"}
           </Button>

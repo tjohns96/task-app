@@ -5,6 +5,8 @@ import { ChevronLeft, Add } from "@mui/icons-material";
 import { minHeight } from "@mui/system";
 import ProjectList from "./ProjectList";
 import uniqid from "uniqid";
+import { setDoc, doc } from "firebase/firestore";
+import { db } from "../firebase-config";
 
 export default function ProjectArea(props) {
   const [drawerWidth, setDrawerWidth] = useState(350);
@@ -28,10 +30,18 @@ export default function ProjectArea(props) {
     }
   }
   function handleClickAddBtn() {
-    props.setProjects((arr) => [
-      ...arr,
-      { id: uniqid(), data: { projectName: "" } },
-    ]);
+    const newTask = {
+      id: uniqid(),
+      data: { projectName: "New project", uid: props.currUser },
+    };
+    props.setProjects((arr) => [...arr, newTask]);
+    if (props.currUser) {
+      setDoc(doc(db, "projects", newTask.id), {
+        id: newTask.id,
+        projectName: newTask.data.projectName,
+        uid: newTask.data.uid,
+      });
+    }
   }
   window.addEventListener("resize", handleResize);
   return (

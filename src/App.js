@@ -45,9 +45,12 @@ function App() {
     }
     getProjects();
   }, [currUser]);
+
   useEffect(() => {
     if (!projects[0]) {
       setCurrProject();
+    } else if (!currProject) {
+      setCurrProject(projects[0]);
     }
   }, [projects]);
 

@@ -38,10 +38,12 @@ export default function ProjectList(props) {
     }
     props.setProjects(projectsCopy);
     props.chooseProject(currProject);
-    projectsCopy.forEach(async (project) => {
-      const docRef = doc(db, "projects", project.id);
-      await updateDoc(docRef, { order: project.data.order });
-    });
+    if (props.currUser) {
+      projectsCopy.forEach(async (project) => {
+        const docRef = doc(db, "projects", project.id);
+        await updateDoc(docRef, { order: project.data.order });
+      });
+    }
   }
   return (
     <DragDropContext onDragEnd={handleDragEnd}>

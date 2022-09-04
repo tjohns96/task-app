@@ -27,6 +27,7 @@ export default function TaskArea(props) {
           key={task.id}
           thisTask={task}
           currProject={props.currProject}
+          currUser={props.currUser}
           taskstodo={props.taskstodo}
           tasksinprogress={props.tasksinprogress}
           taskscompleted={props.taskscompleted}
@@ -51,7 +52,7 @@ export default function TaskArea(props) {
         taskName: "New task",
         description: "Your description here",
         uid: props.currUser,
-        dueDate: Date(),
+        dueDate: new Date().toLocaleDateString("en-US"),
       },
     };
     switch (nameSpaceStripped) {
@@ -65,8 +66,10 @@ export default function TaskArea(props) {
         props.setTaskscompleted((tasks) => [...tasks, newTask]);
         break;
     }
-    const docRef = doc(db, "tasks", newTask.id);
-    await setDoc(docRef, newTask);
+    if (props.currUser) {
+      const docRef = doc(db, "tasks", newTask.id);
+      await setDoc(docRef, newTask);
+    }
   }
   return (
     <div className={`task-area ${nameSpaceStripped}`}>

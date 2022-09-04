@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import { Delete } from "@mui/icons-material";
 import { db } from "../firebase-config";
 import { updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { DateWithoutTime } from "epoq";
 
 export default function Task(props) {
   const [taskName, setTaskName] = useState(props.thisTask.data.taskName);
@@ -67,8 +68,12 @@ export default function Task(props) {
           props.setTaskscompleted(tasks);
           break;
       }
-      const taskRef = doc(db, "tasks", thisTask.id);
-      await updateDoc(taskRef, { "data.taskName": e.target.value });
+      console.log(props.currUser);
+      if (props.currUser) {
+        console.log("fire");
+        const taskRef = doc(db, "tasks", thisTask.id);
+        await updateDoc(taskRef, { "data.taskName": e.target.value });
+      }
     }
   }
   async function handleTaskDescEnter(e, onBlur) {
@@ -107,8 +112,10 @@ export default function Task(props) {
           props.setTaskscompleted(tasks);
           break;
       }
-      const taskRef = doc(db, "tasks", thisTask.id);
-      await updateDoc(taskRef, { "data.description": e.target.value });
+      if (props.currUser) {
+        const taskRef = doc(db, "tasks", thisTask.id);
+        await updateDoc(taskRef, { "data.description": e.target.value });
+      }
     }
   }
   async function handleClickDelete() {
@@ -138,13 +145,17 @@ export default function Task(props) {
         props.setTaskscompleted(tasks);
         break;
     }
-    await deleteDoc(doc(db, "tasks", thisTask.id));
+    if (props.currUser) {
+      await deleteDoc(doc(db, "tasks", thisTask.id));
+    }
   }
   async function handleDateInput(date) {
-    const newDate = new Date(date);
-    setDueDate(newDate);
-    const docRef = doc(db, "tasks", props.thisTask.id);
-    await updateDoc(docRef, { "data.dueDate": newDate.toString() });
+    const newDate = date.toLocaleDateString("en-US");
+    setDueDate(new Date(newDate));
+    if (props.currUser) {
+      const docRef = doc(db, "tasks", props.thisTask.id);
+      await updateDoc(docRef, { "data.dueDate": newDate });
+    }
   }
 
   return (
