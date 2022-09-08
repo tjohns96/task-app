@@ -1,7 +1,6 @@
 {
   "name": "task-app",
   "version": "0.1.0",
-  "homepage": "https://tjohns96.github.io/task-app",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.0",
